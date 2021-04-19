@@ -1,13 +1,23 @@
 from docx import Document
 from docx.shared import Pt, RGBColor
+from docx.enum.style import WD_STYLE_TYPE
 
 # 1，创建一个文档对象
 document = Document()
 # 2，写入内容
 document.add_heading("简介", level=4)  # 标题，级别
+# 样式：自定义的样式以键值对的形式存在，如 textstyle=自定义样式
+style = document.styles.add_style("textstyle", WD_STYLE_TYPE.PARAGRAPH)
+print(style.style_id)
+print(style.name)
+style.font.size = Pt(5)
+
+# 删除自定义样式：删除后，在下文中引用该样式的地方将会报错
+# document.styles['textstyle'].delete()
+
 # 段落
 p1 = document.add_paragraph("aaaaaaaaaaaaaaa,bbbbbbbbbbbbbb,"
-                            "cccccccccccccccccccccccccccc,dddddddddddddddddddddd.")
+                            "cccccccccccccccccccccccccccc,dddddddddddddddddddddd.", style="textstyle")
 p1.insert_paragraph_before("!!在段落前插入一个新的段落")
 format = p1.paragraph_format
 format.left_indent = Pt(20)  # 左缩进
